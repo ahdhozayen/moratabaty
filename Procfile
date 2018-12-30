@@ -1,1 +1,1 @@
-web: gunicorn moratabat.wsgi
+web: gunicorn mashreq_hr_project.wsgi
