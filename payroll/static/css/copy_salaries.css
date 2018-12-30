@@ -1,0 +1,26 @@
+#title{
+    text-align: right;
+    padding-right: 1em;
+    color:#243a51;
+    text-shadow: 3px 3px 3px grey;
+    font-style: italic;
+}
+
+#copy-form{
+    border-radius: 0.1em;
+    /* Shadow start */
+    -webkit-box-shadow: 4px 4px 12px 0px rgba(36,58,81,0.42);
+    -moz-box-shadow: 4px 4px 12px 0px rgba(36,58,81,0.42);
+    box-shadow: 4px 4px 12px 0px rgba(36,58,81,0.42); 
+    /* Shadow End */
+}
+
+#copy-btn{
+    border-radius: 0.1em;
+    /* Shadow start */
+    -webkit-box-shadow: 4px 4px 12px 0px rgba(36,58,81,0.42);
+    -moz-box-shadow: 4px 4px 12px 0px rgba(36,58,81,0.42);
+    box-shadow: 4px 4px 12px 0px rgba(36,58,81,0.42);   
+    /* Shadow End */
+    font-size: 0.9em;
+}

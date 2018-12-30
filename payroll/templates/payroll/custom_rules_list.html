@@ -1,0 +1,169 @@
+{% extends "dashboard-viewdata.html" %}
+{% load staticfiles %}
+{% block table %}
+<table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th class="pr-4" scope="col">م</th>
+                <th scope="col">
+                <a href={% url 'payroll:custom_rules_list' by='name' %} class="text-white">
+                    اسم القاعدة
+                </a>
+                </th>
+                <th scope="col">
+                <a href={% url 'payroll:custom_rules_list' by='taxable' %} class="text-white">
+                    خاضعة للضريبة؟
+                </a>
+                </th>
+                <th scope="col">تعديل</th>
+                <th scope="col">حذف</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for custom_rule in custom_rules %}
+            <tr class="table-light" id="table-row" >
+                    <td class="pr-4" scope="row" data-toggle="modal" data-target="#detail-modal-{{custom_rule.pk}}">
+                        {{ forloop.counter }}
+                    </td>
+                    <td data-toggle="modal" data-target="#detail-modal-{{custom_rule.pk}}">{{custom_rule.name}}</td>
+                    {% if custom_rule.taxable %}
+                    <td data-toggle="modal" data-target="#detail-modal-{{custom_rule.pk}}">نعم</td>
+                    {% else %}
+                    <td data-toggle="modal" data-target="#detail-modal-{{custom_rule.pk}}">لا</td>
+                    {% endif %}
+                    <td> <a href={% url 'payroll:edit_custom_rule' pk=custom_rule.pk %}><img src={% static 'img/edit-icon.png' %} alt="edit"></a></td>
+                    <td>
+                        <a href="#" data-toggle="modal" data-target="#delete-modal-{{custom_rule.pk}}">
+                            <img src={% static 'img/delete-icon.png' %} alt="delete">
+                        </a>
+                    </td>
+                    
+            </tr>
+            <!--Detail Modal -->
+            <div class="modal fade" id="detail-modal-{{custom_rule.pk}}" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                <div class="modal-dialog modal modal-dialog-centered p-3" role="document">
+                <div class="modal-content p-3">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="detailModalLabel">تفاصيل القاعدة:</h3>
+                    </div>
+                        <div id="detail-list" class="modal-body">
+                            <ul class="list-group">
+                                <li class="list-group-item list-group-item-primary d-flex justify-content-between align-items-center">
+                                    اسم القاعدة:    
+                                    {{custom_rule.name}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+   
+                                        <div class="container">
+                                                <div class="col">
+                                                    تعريف القاعدة: 
+                                                </div>
+                                                <div class="col" style="background: #fdf6e3;float: left;direction: ltr; font-size: 0.65em; text-align: left; padding-top: 1em; border-radius: 0.1em;">
+                                                        {% spaceless %}    
+                                                    <pre>
+                                                                <code style="color: #b52a00;">{{custom_rule.rule_definition}}</code>
+                                                        </pre>
+                                                        {% endspaceless %}
+                                            </div>
+
+
+                                        </div>
+                                    </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    خاضعة للضريبة:
+                                    {% if custom_rule.taxable %}
+                                    <span class="badge badge-success badge-pill">نعم</span>
+                                    {% else %}
+                                    <span class="badge badge-danger badge-pill">لا</span>
+                                    {% endif %}
+                                </li>
+                            </ul>
+                            <div id="detail-buttons">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+                                    <a type="button" class="btn btn-primary" href={% url 'payroll:edit_custom_rule' pk=custom_rule.pk %}>تعديل</a>
+                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-modal-{{custom_rule.pk}}">حذف</button>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="delete-modal-{{custom_rule.pk}}" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                    <div class=" modal-dialog modal modal-dialog-centered w-50 p-3" role="document">
+                    <div class="modal-content alert">
+                        <div class="modal-header">
+                            <h3 class="modal-title" id="detailModalLabel">هل أنت متأكد؟</h3>
+                        </div>
+                            <div class="modal-body">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+                                    <a type="button" class="btn btn-danger" href={% url 'payroll:delete_custom_rule' pk=custom_rule.pk %}>نعم، احذف</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        {% endfor %}
+        </tbody>
+    </table> 
+    <hr>
+    <div class="col p-5" style="text-align: right; direction: rtl;">
+            <h3>كيفية تعريف قاعدة مخصصة باستخدام لغة بايثون:</h3>
+            <p>
+                يمكنك تعريف قاعدة خصم / إضافة مخصصة هنا باستخدام لغة بايثون
+    
+            </p>
+            <p>
+                لديك المتغيرات التالية متاحة للاستخدام:
+    
+            </p>
+            <ul>
+                <li>
+                   <b><code>basic:</code></b>  هذا هو الراتب الأساسي للموظف.
+                </li>
+                <li>
+                   <b><code>variable:</code></b>  هذا هو الراتب المتغير للموظف.
+                </li>
+                <li>
+                    <b><code>d_days:</code></b>هذه هي عدد الأيام التي يجب خصمها للموظف في هذا الشهر
+                    بسبب غيابه أو بسبب قواعد أخرى للحضور تنطوي على أيام خصم.
+    
+                </li>
+                <li>
+                        <b><code> grs:</code></b>(بدون "o")
+                        الراتب الإجمالي و الذى يساوي الراتب الأساسي + الراتب المتغير + أي بدلات / مكافآت / حوافز إضافية مضافة.
+    
+                </li>
+            </ul>
+            <p>
+    
+            </p>
+            بعد حساب المعادلة الخاصة بك ، يجب عليك تخزين المبلغ المطلوب ليتم إضافته / خصمه في متغير يسمى <b><code>amount</code></b>.
+            إذا كانت قيمة <b><code>amount</code></b> موجبة ، فسيتم إضافة المبلغ إلى المرتب الصافي للموظف.
+            وإذا كان سالبة ، سيتم خصمها.
+            
+            
+            <h4>مثال:</h4>
+    
+            <div class="container">
+            <div class="col" style="background: #fdf6e3;float: left;direction: ltr; font-size: 0.75em; text-align: left; padding-top: 1em; border-radius: 0.1em;">
+            <pre>
+            <code style="color: #b52a00;">
+            if basic <= 5000:
+                extra_deduction = -250
+            else:
+                extra_deduction = -500
+            amount = extra_deduction
+            </code>
+            </pre>
+        </div>
+                <br>
+    <p>
+        تأكد ان الكود المكتوب يطابق قواعد لغة البايثون
+    </p>
+    
+            </div>
+            
+            </div>
+{% endblock table %}
+
+
+        
+        

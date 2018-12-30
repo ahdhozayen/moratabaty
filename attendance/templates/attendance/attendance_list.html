@@ -1,0 +1,142 @@
+{% extends "dashboard-viewdata.html" %}
+{% load staticfiles %}
+{% block table %}
+<table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th class="pr-4" scope="col">م</th>
+                <th scope="col">
+                <a href={% url 'attendance:attendance_list' by='employee_id__first_name' %} class="text-white">
+                    اسم الموظف
+                </a>
+                </th>
+                <th scope="col">
+                <a href={% url 'attendance:attendance_list' by='month' %} class="text-white">
+                    الشهر
+                    </a>
+                </th>
+                <th scope="col">
+                    <a href={% url 'attendance:attendance_list' by='year' %} class="text-white">
+                    السنة
+                    </a>
+                </th>
+                <th scope="col">تعديل</th>
+                <th scope="col">حذف</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for attendance in attendances %}
+            {% if attendance.is_final %}
+            <tr class="table-success" id="table-row" >
+            {% else %}  
+            <tr class="table-light" id="table-row" >
+            {% endif %}
+                    <td class="pr-4" scope="row" data-toggle="modal" data-target="#detail-modal-{{attendance.pk}}">
+                        {{ forloop.counter }}
+                    </td>
+                    <td data-toggle="modal" data-target="#detail-modal-{{attendance.pk}}">{{attendance.employee_id.first_name}} {{attendance.employee_id.last_name}}</td>
+                    <td data-toggle="modal" data-target="#detail-modal-{{attendance.pk}}">{{attendance.month}}</td>
+                    <td data-toggle="modal" data-target="#detail-modal-{{attendance.pk}}">{{attendance.year}}</td>
+                    {% if attendance.is_final %}
+                    <td> <a href="#"><img src={% static 'img/edit-icon.png' %} alt="edit"></a></td>
+                    <td>
+                        <a href="#">
+                            <img src={% static 'img/delete-icon.png' %} alt="delete">
+                        </a>
+                    </td>
+                    {% else %}
+                    <td> <a href={% url 'attendance:edit_attendance' pk=attendance.pk %}><img src={% static 'img/edit-icon.png' %} alt="edit"></a></td>
+                    <td>
+                        <a href="#" data-toggle="modal" data-target="#delete-modal-{{attendance.pk}}">
+                            <img src={% static 'img/delete-icon.png' %} alt="delete">
+                        </a>
+                    </td>
+                    {% endif %}
+            </tr>
+            <!--Detail Modal -->
+            <div class="modal fade" id="detail-modal-{{attendance.pk}}" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered p-3" role="document">
+                <div class="modal-content p-3">
+                    <div class="modal-header">
+                        {% if attendance.is_final %}
+                        <h3 class="modal-title" id="detailModalLabel">تفاصيل بيان الحضور:(هذا البيان نهائي لا يمكن تعديلة)</h3>
+                        {% else %}
+                        <h3 class="modal-title" id="detailModalLabel">تفاصيل بيان الحضور:</h3>
+                        {% endif %}
+                    </div>
+                        <div id="detail-list" class="modal-body">
+                            <ul class="list-group">
+                                {% if attendance.is_final %}
+                                <li class="list-group-item list-group-item-success d-flex justify-content-between align-items-center">
+                                {% else %}
+                                <li class="list-group-item list-group-item-primary d-flex justify-content-between align-items-center">
+                                {% endif %}
+                                     بيان الحضور:    
+                                    {{attendance}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    اسم الموظف:    
+                                    {{attendance.employee_id.first_name}} {{attendance.employee_id.last_name}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    الادارة:    
+                                    {{attendance.department}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    القسم:    
+                                    {{attendance.section}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    الوظيفة:    
+                                    {{attendance.sub_section}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    الدرجة:    
+                                    {{attendance.degree}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                   عدد ساعات العمل الاضافية: 
+                                    <span class="badge badge-primary badge-pill">{{attendance.overtime_hours}}</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    عدد أيام العمل فى هذا الشهر: 
+                                    <span class="badge badge-primary badge-pill">{{attendance.total_working_days_in_month}}</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                       عدد ايام حضور الموظف فى هذا الشهر: 
+                                        <span class="badge badge-primary badge-pill">{{attendance.total_attended_days}}</span>
+                                </li>
+
+                            </ul>
+                            <div id="detail-buttons">
+                                {% if attendance.is_final %}
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+                                {% else %}
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+                                <a type="button" class="btn btn-primary" href={% url 'attendance:edit_attendance' pk=attendance.pk %}>تعديل</a>
+                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-modal-{{attendance.pk}}">حذف</button>
+                                {% endif %}
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="delete-modal-{{attendance.pk}}" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                    <div class=" modal-dialog modal modal-dialog-centered w-50 p-3" role="document">
+                    <div class="modal-content alert">
+                        <div class="modal-header">
+                            <h3 class="modal-title" id="detailModalLabel">هل أنت متأكد؟</h3>
+                        </div>
+                            <div class="modal-body">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+                                    <a type="button" class="btn btn-danger" href={% url 'attendance:delete_attendance' pk=attendance.pk %}>نعم، احذف</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        {% endfor %}
+        </tbody>
+    </table> 
+
+{% endblock table %}
+        

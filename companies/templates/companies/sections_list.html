@@ -1,0 +1,97 @@
+{% extends "dashboard-viewdata.html" %}
+{% load staticfiles %}
+{% load extra_tags %}
+{% block table %}
+<table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th class="pr-4" scope="col">م</th>
+                <th scope="col">
+                <a href={% url 'companies:sections_list' by='name' %} class="text-white">
+                    اسم القسم
+                </a>
+                </th>
+                <th scope="col">
+                <a href={% url 'companies:sections_list' by='department_id__name' %} class="text-white">
+                    الادارة التابع لها
+                    </a>
+                </th>
+                <th scope="col">
+                        <a href={% url 'companies:sections_list' by='department_id__branch_id__name' %} class="text-white">
+                        الفرع   
+                        </a>
+                </th>
+                <th scope="col">تعديل</th>
+                <th scope="col">حذف</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for section in sections %}
+            <tr class="table-light" id="table-row" >
+                    <td class="pr-4" scope="row" data-toggle="modal" data-target="#detail-modal-{{section.pk}}">
+                        {{ forloop.counter }}
+                    </td>
+                    <td data-toggle="modal" data-target="#detail-modal-{{section.pk}}">{{section.name}}</td>
+                    <td data-toggle="modal" data-target="#detail-modal-{{section.pk}}">{{section.department_id|d_arrow_split}}</td>
+                    <td data-toggle="modal" data-target="#detail-modal-{{section.pk}}">{{section.department_id.branch_id|d_arrow_split}}</td>
+                    <td> <a href={% url 'companies:edit_section' pk=section.pk %}><img src={% static 'img/edit-icon.png' %} alt="edit"></a></td>
+                    <td>
+                        <a href="#" data-toggle="modal" data-target="#delete-modal-{{section.pk}}">
+                            <img src={% static 'img/delete-icon.png' %} alt="delete">
+                        </a>
+                    </td>
+                    
+            </tr>
+            <!--Detail Modal -->
+            <div class="modal fade" id="detail-modal-{{section.pk}}" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                <div class="modal-dialog modal modal-dialog-centered p-3" role="document">
+                <div class="modal-content p-3">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="detailModalLabel">تفاصيل القسم:</h3>
+                    </div>
+                        <div id="detail-list" class="modal-body">
+                            <ul class="list-group">
+                                <li class="list-group-item list-group-item-primary d-flex justify-content-between align-items-center">
+                                    اسم القسم:
+                                    {{section.name}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    الادارة التابع لها:    
+                                    {{section.department_id|d_arrow_split}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                   عدد الوظائف الموجودة بالقسم:
+                                    <span class="badge badge-primary badge-pill">{{section.subsections.all|length}}</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    عدد الموظفين العاملين بالقسم: 
+                                    <span class="badge badge-primary badge-pill">{{section.employees.all|length}}</span>
+                                </li>
+                            </ul>
+                            <div id="detail-buttons">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+                                    <a type="button" class="btn btn-primary" href={% url 'companies:edit_section' pk=section.pk %}>تعديل</a>
+                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-modal-{{section.pk}}">حذف</button>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="delete-modal-{{section.pk}}" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                    <div class=" modal-dialog modal modal-dialog-centered w-50 p-3" role="document">
+                    <div class="modal-content alert">
+                        <div class="modal-header">
+                            <h3 class="modal-title" id="detailModalLabel">هل أنت متأكد؟</h3>
+                        </div>
+                            <div class="modal-body">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+                                    <a type="button" class="btn btn-danger" href={% url 'companies:delete_section' pk=section.pk %}>نعم، احذف</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        {% endfor %}
+        </tbody>
+    </table> 
+
+{% endblock table %}

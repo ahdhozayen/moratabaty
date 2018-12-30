@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load bootstrap4 %}
+{% block head1 %}
+<link rel="stylesheet" href={% static 'css/landing.css' %}>
+{% endblock head1 %}
+{% block body %}
+<div class="container">
+    <div id="title">
+        <h1 class="display-4">فيه موقع جامد بيتعمل هنا!!!</h1>
+        <h1 class="display-4">زرنا تاني قريب..</h1>
+    </div>
+<br>
+    <!-- Button trigger modal -->
+<button id="request-button" type="button" onclick="$('.modal').modal({'backdrop': 'static'});" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#request-form">
+طلب حساب اختباري    
+</button>
+<div class="row">
+
+  <div class="col-lg-4"></div>
+  {% if messages %}
+  {% for message in messages %}
+  {% if message.level == 25 %}
+  <div class="alert alert-dismissible alert-success col-lg-4 col-md-12">
+    {{ message }}
+  </div>
+  {% elif message.level == 40 %} 
+  <div class="alert alert-dismissible alert-danger col-lg-4 col-md-12">
+    {{ message }}
+  </div>
+</div>
+{% endif %}
+      {% endfor %}
+{% endif %}
+      <!-- Modal -->
+      <div class="modal fade" id="request-form" tabindex="-1" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modal-title">طلب حساب اختباري</h5>
+            </div>
+            <div class="modal-body">
+              قم باءدخال البيانات المطلوبة:
+            </div>
+              <form id="requester-form" method="POST">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+                <input type="submit" class="btn btn-primary" value="طلب">
+              </form>
+          </div>
+        </div>
+      </div>
+</div>
+<div class="footer">
+        <br>
+          <h4 id="copyright"><a href="http://mashreqarabia.com/">&copy; Mashreq Arabia 2018</a></h4>
+        </div>
+{% endblock body %}

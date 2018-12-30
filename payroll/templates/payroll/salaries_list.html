@@ -1,0 +1,244 @@
+{% extends "dashboard-viewdata.html" %}
+{% load staticfiles %}
+{% block table %}
+<table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th class="pr-4" scope="col">م</th>
+                <th scope="col">
+                <a href={% url 'payroll:salaries_list' by='employee_id__first_name' %} class="text-white">
+                    اسم الموظف
+                    </a>
+                </th>
+                <th scope="col">
+                        <a href={% url 'payroll:salaries_list' by='month' %} class="text-white">
+                        الشهر
+                        </a>
+                </th>
+                <th scope="col">
+                        <a href={% url 'payroll:salaries_list' by='year' %} class="text-white">
+                            السنة   
+                        </a>
+                </th>
+                <th scope="col">تعديل</th>
+                <th scope="col">حذف</th>
+                <th scope="col">اعادة الحساب</th>
+                <th scope="col">نسخة نهائية</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for salary in salaries %}
+            {% if salary.is_final %}
+            <tr class="table-success" id="table-row" >
+            {% else %}
+            <tr class="table-light" id="table-row" >
+            {% endif %}
+                    <td class="pr-4" scope="row" data-toggle="modal" data-target="#detail-modal-{{salary.pk}}">
+                        {{ forloop.counter }}
+                    </td>
+                    <td data-toggle="modal" data-target="#detail-modal-{{salary.pk}}">{{salary.employee_id.first_name}} {{salary.employee_id.last_name}}</td>
+                    <td data-toggle="modal" data-target="#detail-modal-{{salary.pk}}">{{salary.month}}</td>
+                    <td data-toggle="modal" data-target="#detail-modal-{{salary.pk}}">{{salary.year}}</td>
+                    {% if salary.is_final %}
+                    <td> <a href="#"><img src={% static 'img/edit-icon.png' %} alt="edit"></a></td>
+                    <td>
+                        <a href="#">
+                            <img src={% static 'img/delete-icon.png' %} alt="delete">
+                        </a>
+                    </td>
+                    <td>
+                        <a href="#">
+                            <img src={% static 'img/refresh-icon.png' %} alt="refresh">
+                        </a>
+                    </td>
+                    <td>
+                        <a href="#">
+                            <img src={% static 'img/final-icon.png' %} alt="final">
+                        </a>
+                    </td>
+                    {% else %}
+                    <td> <a href={% url 'payroll:edit_salary' pk=salary.pk %}><img src={% static 'img/edit-icon.png' %} alt="edit"></a></td>
+                    <td>
+                        <a href="#" data-toggle="modal" data-target="#delete-modal-{{salary.pk}}">
+                            <img src={% static 'img/delete-icon.png' %} alt="delete">
+                        </a>
+                    </td>
+                    <td>
+                        <a href={% url 'payroll:recalculate_salary' pk=salary.pk %}>
+                            <img src={% static 'img/refresh-icon.png' %} alt="refresh">
+                        </a>
+                    </td>
+                    <td>
+                        <a href="#" data-toggle="modal" data-target="#final-modal-{{salary.pk}}">
+                            <img src={% static 'img/final-icon.png' %} alt="final">
+                        </a>
+                    </td>
+                    {% endif %}
+            </tr>
+            <!--Detail Modal -->
+            <div class="modal fade" id="detail-modal-{{salary.pk}}" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered p-3" role="document">
+                <div class="modal-content p-3">
+                    <div class="modal-header">
+                        {% if salary.is_final %}
+                            <h3 class="modal-title" id="detailModalLabel">تفاصيل بيان المرتب: (هذا البيان نهائي لا يمكن تعديلة)</h3>
+                        {% else %}
+                            <h3 class="modal-title" id="detailModalLabel">تفاصيل بيان المرتب:</h3>
+                        {% endif %}
+                    </div>
+                        <div id="detail-list" class="modal-body">
+                            <ul class="list-group">
+                                {% if salary.is_final %}
+                                <li class="list-group-item list-group-item-success d-flex justify-content-between align-items-center">
+                                {% else %}
+                                <li class="list-group-item list-group-item-primary d-flex justify-content-between align-items-center">
+                                {% endif %}
+                                     بيان المرتب:    
+                                    {{salary}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    اسم الموظف:    
+                                    {{salary.employee_id.first_name}} {{salary.employee_id.last_name}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    الشهر:    
+                                    {{salary.month}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    السنة:    
+                                    {{salary.year}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    الادارة:    
+                                    {{salary.department}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    القسم:    
+                                    {{salary.section}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    الوظيفة:    
+                                    {{salary.sub_section}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    الدرجة:    
+                                    {{salary.degree}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    المرتب الاساسي: 
+                                     <span class="badge badge-primary badge-pill">{{salary.basic_salary}}</span>
+                                 </li>
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    المرتب المتغير: 
+                                     <span class="badge badge-primary badge-pill">{{salary.variable_salary}}</span>
+                                 </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                   عدد أيام الغياب فى هذا الشهر: 
+                                    <span class="badge badge-primary badge-pill">{{salary.deducted_days}}</span>
+                                </li>
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    الخصم بسبب أيام الغياب: 
+                                      <span class="badge badge-primary badge-pill">{{salary.abscense_days_deduction}}</span>
+                                  </li>
+                                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    مجموع بنود المرتب المضافة الغير خاضعة للضريبة: 
+                                     <span class="badge badge-primary badge-pill">{{salary.total_untaxable_added_salary_elements}}</span>
+                                 </li>
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                   مجموع بنود المرتب المضافة الخاضعة للضريبة: 
+                                      <span class="badge badge-primary badge-pill">{{salary.total_taxable_added_salary_elements}}</span>
+                                  </li>
+                                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                                   <b>المرتب الشامل: </b>
+                                      <span class="badge badge-success badge-pill">{{salary.gross_salary}}</span>
+                                  </li>
+                                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    مجموع بنود المرتب المخصومة الغير خاضعة للضريبة: 
+                                      <span class="badge badge-primary badge-pill">{{salary.total_untaxable_deducted_salary_elements}}</span>
+                                  </li>
+                                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    مجموع بنود المرتب المخصومة الخاضعة للضريبة: 
+                                      <span class="badge badge-primary badge-pill">{{salary.total_taxable_deducted_salary_elements}}</span>
+                                  </li>
+                                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    قاعدة احتساب التأمينات:    
+                                    {{salary.insurance_rule}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    قيمة خصم التأمينات: 
+                                      <span class="badge badge-primary badge-pill">{{salary.insurance_deduction}}</span>
+                                  </li>
+                                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    قاعدة احتساب الضريبة:    
+                                    {{salary.tax_rule}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                   المرتب الخاضع للضريبة: 
+                                      <span class="badge badge-primary badge-pill">{{salary.taxable_salary}}</span>
+                                  </li>
+                                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    قيمة خصم الضرائب: 
+                                      <span class="badge badge-primary badge-pill">{{salary.taxes_deduction}}</span>
+                                  </li>
+                                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    قاعدة مخصصة:    
+                                    {{salary.custom_rule}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    قيمة القاعدة المخصصة: 
+                                      <span class="badge badge-primary badge-pill">{{salary.custom_rule_amount}}</span>
+                                  </li>
+                                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <b>المرتب الصافى:</b>
+                                      <span class="badge badge-success badge-pill">{{salary.net_salary}}</span>
+                                  </li>
+                            </ul>
+                            <div id="detail-buttons">
+                                {% if salary.is_final %}
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+                                {% else %}                                  
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+                                    <a type="button" class="btn btn-primary" href={% url 'payroll:edit_salary' pk=salary.pk %}>تعديل</a>
+                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-modal-{{salary.pk}}">حذف</button>
+                                    <a type="button" class="btn btn-warning" href={% url 'payroll:recalculate_salary' pk=salary.pk %}>اعادة حساب و تحديث البيان</a>
+                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#final-modal-{{salary.pk}}">نسخة نهائية</button>
+                                {% endif %}
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Detail Modal -->
+            <div class="modal fade" id="delete-modal-{{salary.pk}}" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                    <div class=" modal-dialog modal modal-dialog-centered w-50 p-3" role="document">
+                    <div class="modal-content alert">
+                        <div class="modal-header">
+                            <h3 class="modal-title" id="detailModalLabel">هل أنت متأكد؟</h3>
+                        </div>
+                            <div class="modal-body">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+                                    <a type="button" class="btn btn-danger" href={% url 'payroll:delete_salary' pk=salary.pk %}>نعم، احذف</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <!-- Final Modal -->
+            <div class="modal fade" id="final-modal-{{salary.pk}}" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                    <div class=" modal-dialog modal modal-dialog-centered w-50 p-3" role="document">
+                    <div class="modal-content alert">
+                        <div class="modal-header">
+                            <h3 class="modal-title">هل أنت متأكد؟، لا يمكن تعديل البيان بعد أن يصبح نسخة نهائية.</h3>
+                        </div>
+                            <div class="modal-body">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+                                    <a type="button" class="btn btn-success" href={% url 'payroll:finalize_salary' pk=salary.pk %}>نسخة نهائية</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        {% endfor %}
+        </tbody>
+    </table> 
+
+{% endblock table %}
+        

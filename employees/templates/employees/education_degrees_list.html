@@ -1,0 +1,49 @@
+{% extends "dashboard-viewdata.html" %}
+{% load staticfiles %}
+{% block table %}
+<table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th class="pr-4" scope="col">م</th>
+                <th scope="col">
+                        <a href={% url 'employees:education_degrees_list' by='name' %} class="text-white">
+                            اسم الدرجة
+                        </a>
+                </th>
+                <th scope="col">تعديل</th>
+                <th scope="col">حذف</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for education_degree in education_degrees %}
+            <tr class="table-light" id="table-row" >
+                    <td class="pr-4" scope="row">
+                        {{ forloop.counter }}
+                    </td>
+                    <td>{{education_degree.name}}</td>
+                    <td> <a href={% url 'employees:edit_education_degree' pk=education_degree.pk %}><img src={% static 'img/edit-icon.png' %} alt="edit"></a></td>
+                    <td>
+                        <a href="#" data-toggle="modal" data-target="#delete-modal-{{education_degree.pk}}">
+                            <img src={% static 'img/delete-icon.png' %} alt="delete">
+                        </a>
+                    </td>
+                    
+            </tr>
+            <div class="modal fade" id="delete-modal-{{education_degree.pk}}" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                    <div class=" modal-dialog modal modal-dialog-centered w-50 p-3" role="document">
+                    <div class="modal-content alert">
+                        <div class="modal-header">
+                            <h3 class="modal-title" id="detailModalLabel">هل أنت متأكد؟</h3>
+                        </div>
+                            <div class="modal-body">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+                                    <a type="button" class="btn btn-danger" href={% url 'employees:delete_education_degree' pk=education_degree.pk %}>نعم، احذف</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        {% endfor %}
+        </tbody>
+    </table> 
+{% endblock table %}
+        

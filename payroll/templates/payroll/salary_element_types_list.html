@@ -1,0 +1,69 @@
+{% extends "dashboard-viewdata.html" %}
+{% load staticfiles %}
+{% block table %}
+<table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th class="pr-4" scope="col">م</th>
+                <th scope="col">
+                        <a href={% url 'payroll:salary_element_types_list' by='name' %} class="text-white">
+                        اسم البند
+                        </a>
+                </th>
+                <th scope="col">
+                        <a href={% url 'payroll:salary_element_types_list' by='element_type' %} class="text-white">
+                            نوعه
+                        </a>
+                </th>
+                <th scope="col">
+                        <a href={% url 'payroll:salary_element_types_list' by='taxable' %} class="text-white">
+                        خاضع للضريبة؟
+                        </a>
+                </th>
+                <th scope="col">تعديل</th>
+                <th scope="col">حذف</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for salary_element_type in salary_element_types %}
+            <tr class="table-light" id="table-row" >
+                    <td class="pr-4" scope="row">
+                        {{ forloop.counter }}
+                    </td>
+                    <td>{{salary_element_type.name}}</td>
+                    {% if salary_element_type.element_type == 'addition' %}
+                    <td>اضافة</td>
+                    {% elif  salary_element_type.element_type == 'deduction' %}
+                    <td>خصم</td>
+                    {% endif %}
+                    {% if salary_element_type.taxable %}
+                    <td>نعم</td>
+                    {% else %}
+                    <td>لا</td>
+                    {% endif %}
+                    <td> <a href={% url 'payroll:edit_salary_element_type' pk=salary_element_type.pk %}><img src={% static 'img/edit-icon.png' %} alt="edit"></a></td>
+                    <td>
+                        <a href="#" data-toggle="modal" data-target="#delete-modal-{{salary_element_type.pk}}">
+                            <img src={% static 'img/delete-icon.png' %} alt="delete">
+                        </a>
+                    </td>
+                    
+            </tr>
+            <div class="modal fade" id="delete-modal-{{salary_element_type.pk}}" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                    <div class=" modal-dialog modal modal-dialog-centered w-50 p-3" role="document">
+                    <div class="modal-content alert">
+                        <div class="modal-header">
+                            <h3 class="modal-title" id="detailModalLabel">هل أنت متأكد؟</h3>
+                        </div>
+                            <div class="modal-body">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+                                    <a type="button" class="btn btn-danger" href={% url 'payroll:delete_salary_element_type' pk=salary_element_type.pk %}>نعم، احذف</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        {% endfor %}
+        </tbody>
+    </table> 
+{% endblock table %}
+        

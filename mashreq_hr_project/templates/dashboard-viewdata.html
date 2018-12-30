@@ -1,0 +1,114 @@
+{% extends "dashboard.html" %}
+{% load bootstrap4 %}
+{% load staticfiles %}
+{% block head2 %}
+<link rel="stylesheet" href={% static "css/dashboard-viewdata.css" %}>
+{% endblock head2 %}
+{% block panel-body %}
+
+<!-- Inserting a dummy variable that will be detected by brython in case of clicking "save and add button" or in case we are editing the record -->
+{% if save_and_add or editing %}
+<div id="open-modal"></div>
+{% endif %}
+
+<div class="container">
+    <div class="row">
+        <h1 class="col-lg-9 col-md-6 col-sm-12" id="title">{{ table_title }}</h1>
+        <div id="action-bar" class="col-lg-3 col-md-6 col-sm-12">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal">
+                    <h4><img src={% static 'img/add-icon.png' %} alt="add">اضافة بيان جديد</h4>
+                </button>
+        </div>
+      </div>
+  </div>
+
+
+    {% if not save_and_add %}
+    <!-- displaying messages if there is any: -->
+    {% if messages %}
+    <div class="row">
+    {% for message in messages %}
+        <div class="col-lg-3"></div>
+        {% if message.level == 25 %}
+        <div class="alert alert-dismissible alert-success col-lg-6 col-md-12">
+            {{ message }}
+        </div>
+        {% elif message.level == 40 %}
+    <div class="alert alert-dismissible alert-danger col-lg-6 col-md-12">
+      {{ message }}
+    </div>
+    {% endif %}
+    <div class="col-lg-3"></div>
+    {% endfor %}
+</div>
+    {% endif %}
+    <!-- end of messages snippet -->
+    {% endif %}
+    <div class="table-responsive">
+            {% block table %}
+
+            {% endblock table %}
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered p-3" role="document">
+            <div class="modal-content p-3">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="modalLabel">{{ modal_title }}</h2>
+                </div>
+                <div class="modal-body">
+                {% if save_and_add %}
+                <!-- displaying messages if there is any: -->
+                    {% if messages %}
+                    {% for message in messages %}
+                    {% if message.level == 25 %}
+                    <div class="alert alert-dismissible alert-success" style="display: block;">
+                        {{ message }}
+                    </div>
+                        {% endif %}
+                        {% endfor %}
+                        {% endif %}
+                <!-- end of messages snippet -->
+                {% endif %}
+                    {% if form %}
+                    <form enctype="multipart/form-data" method="POST">
+                        {% csrf_token %}
+                        {% bootstrap_form form %}
+                        {% if formset %}
+                        <div id="formset" class="card mb-2 p-3">
+                            {{formset_title}}
+                            <div class="card-body">
+                                {{ formset.management_form }}
+                                {% for form in formset  %}
+                                <div id="form-{{forloop.counter}}" class="card m-2 p-4">
+                                        {% bootstrap_form form layout='horizontal' %}
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-lg-8"></div>
+                                    <div class="col-lg-4 col-md-12" >
+                                        <button id="add-row-btn" type="button" class="btn btn-warning btn-block">اضافة صف</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if editing %}
+                        <a type="button" class="btn btn-secondary" href={% url modal_close_url by='' %}>رجوع</a>
+                        <input type="submit" class="btn btn-success" value="حفظ التعديلات" />
+                        {% else %}
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+                        <input type="submit" class="btn btn-success" value="حفظ" />
+                        <input name="save_and_add" type="submit" class="btn btn-primary" value="حفظ و اضافة بيان اخر"/>
+                        {% endif %}
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock panel-body %}

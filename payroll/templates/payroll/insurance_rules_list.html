@@ -1,0 +1,114 @@
+{% extends "dashboard-viewdata.html" %}
+{% load staticfiles %}
+{% block table %}
+<table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th class="pr-4" scope="col">م</th>
+                <th scope="col">
+                <a href={% url 'payroll:insurance_rules_list' by='name' %} class="text-white">
+                    اسم القاعدة
+                </a>
+                </th>
+                <th scope="col">تعديل</th>
+                <th scope="col">حذف</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for insurance_rule in insurance_rules %}
+            {% if insurance_rule.company_id == user.employee.company_id %}
+            <tr class="table-light" id="table-row" >
+            {% else %}
+            <tr class="table-success" id="table-row" >
+            {% endif %}
+                    <td class="pr-4" scope="row" data-toggle="modal" data-target="#detail-modal-{{insurance_rule.pk}}">
+                        {{ forloop.counter }}
+                    </td>
+                    <td data-toggle="modal" data-target="#detail-modal-{{insurance_rule.pk}}">{{insurance_rule.name}}</td>
+                    {% if insurance_rule.company_id == user.employee.company_id %}
+                    <td> <a href={% url 'payroll:edit_insurance_rule' pk=insurance_rule.pk %}><img src={% static 'img/edit-icon.png' %} alt="edit"></a></td>
+                    <td>
+                        <a href="#" data-toggle="modal" data-target="#delete-modal-{{insurance_rule.pk}}">
+                            <img src={% static 'img/delete-icon.png' %} alt="delete">
+                        </a>
+                    </td>
+                    {% else %}
+                    <td> <a href="#"><img src={% static 'img/edit-icon.png' %} alt="edit"></a></td>
+                    <td>
+                        <a href="#">
+                            <img src={% static 'img/delete-icon.png' %} alt="delete">
+                        </a>
+                    </td>
+                    {% endif %}
+            </tr>
+            <!--Detail Modal -->
+            <div class="modal fade" id="detail-modal-{{insurance_rule.pk}}" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                <div class="modal-dialog modal modal-dialog-centered p-3" role="document">
+                <div class="modal-content p-3">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="detailModalLabel">تفاصيل القاعدة:</h3>
+                    </div>
+                        <div id="detail-list" class="modal-body">
+                            <ul class="list-group">
+                                {% if insurance_rule.company_id == user.employee.company_id %}
+                                <li class="list-group-item list-group-item-primary d-flex justify-content-between align-items-center">
+                                {% else %}
+                                <li class="list-group-item list-group-item-success d-flex justify-content-between align-items-center">
+                                {% endif %}
+                                    اسم القاعدة:    
+                                    {{insurance_rule.name}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    نسبة الخصم على الراتب الاساسي:    
+                                    <span class="badge badge-primary badge-pill">{{insurance_rule.basic_deduction_percentage}}%</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    نسبة الخصم على الراتب المتغير:    
+                                    <span class="badge badge-primary badge-pill">{{insurance_rule.variable_deduction_percentage}}%</span>
+                                  
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    الحد الأقصي للراتب الأساسي التأميني: 
+                                    <span class="badge badge-primary badge-pill">{{insurance_rule.maximum_insurable_basic_salary}}</span>
+
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    الحد الأقصي للراتب المتغير التأميني:
+                                    <span class="badge badge-primary badge-pill">{{insurance_rule.maximum_insurable_variable_salary}}</span>
+                                </li>
+                            </ul>
+                            <div id="detail-buttons">
+                                {% if insurance_rule.company_id == user.employee.company_id %}
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+                                <a type="button" class="btn btn-primary" href={% url 'payroll:edit_insurance_rule' pk=insurance_rule.pk %}>تعديل</a>
+                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-modal-{{insurance_rule.pk}}">حذف</button>
+                                {% else %}
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+                                {% endif %}
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="delete-modal-{{insurance_rule.pk}}" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                    <div class=" modal-dialog modal modal-dialog-centered w-50 p-3" role="document">
+                    <div class="modal-content alert">
+                        <div class="modal-header">
+                            <h3 class="modal-title" id="detailModalLabel">هل أنت متأكد؟</h3>
+                        </div>
+                            <div class="modal-body">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+                                    <a type="button" class="btn btn-danger" href={% url 'payroll:delete_insurance_rule' pk=insurance_rule.pk %}>نعم، احذف</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        {% endfor %}
+        </tbody>
+    </table> 
+
+{% endblock table %}
+
+
+        
+        

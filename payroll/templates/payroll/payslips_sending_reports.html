@@ -1,0 +1,51 @@
+{% extends "dashboard.html" %}
+{% load staticfiles %}
+{% block head2 %}
+  <link rel="stylesheet" href={% static "css/payslips_sending_reports.css" %}>
+{% endblock head2 %}
+{% block panel-body %}
+<div class="container">
+    <div class="row">
+        <h1 class="col-lg-9 col-md-6 col-sm-12" id="title">تقرير الارسال</h1>
+    </div>
+    <p class="alert alert-primary">ملحوظة: هذا التقرير لا يشمل الأخطاء الناتجة عن عناواين البريد الخاطئة.</p>
+<div class="table-responsive">
+<table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th class="pr-4" scope="col">م</th>
+                <th scope="col"> الاسم</th>
+                <th scope="col">رقم الموظف</th>
+                <th scope="col">البريد الالكتروني</th>
+                <th scope="col">تم الارسال؟</th>
+                <th scope="col">السبب</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for report in sending_reports %}
+            <tr class="table-light" id="table-row" >
+                    <td class="pr-4" scope="row">
+                        {{ forloop.counter }}
+                    </td>
+                    <td>{{report.name}}</td>
+                    <td>{{report.employee_number}}</td>
+                    <td>{{report.email}}</td>
+                    {% if report.status == 'success' %}
+                    <td style="color: green;">نعم</td>
+                    {% else %}                      
+                    <td style="color: red;">لا</td>
+                    {% endif %}
+                    <td>{{report.reason}}</td>
+            {% endfor %}
+                    
+            </tr>
+        </tbody>
+    </table> 
+    </div>
+    <div class="row">
+        <div class="col-lg-4 col-md-12" ></div>
+        <a id="back" class="btn btn-success btn-block col-lg-4 col-md-12" role="button" href={% url 'payroll:send_payslips' %}>رجوع</a>
+    </div>
+</div>
+{% endblock panel-body %}
+        

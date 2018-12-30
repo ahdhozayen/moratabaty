@@ -1,0 +1,28 @@
+html{
+    direction: rtl;
+}
+
+body{
+    font-family: 'Lateef', cursive;
+}
+.navbar{
+    position: fixed;
+    top: 0;
+    width: 100%
+    
+}
+
+nav{
+   
+    font-family: 'Lalezar', cursive;
+    font-size: 1.2em;
+    background-color: #243a51;
+    /* Shadow start */
+    -webkit-box-shadow: 4px 4px 12px 0px rgba(36,58,81,0.42);
+    -moz-box-shadow: 4px 4px 12px 0px rgba(36,58,81,0.42);
+    box-shadow: 4px 4px 12px 0px rgba(36,58,81,0.42);   
+    /* Shadow End */
+    margin-bottom: 2.5em;
+    /* position: relative; */
+    z-index: 5;
+}

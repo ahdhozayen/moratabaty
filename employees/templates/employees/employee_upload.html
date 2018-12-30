@@ -1,0 +1,64 @@
+{% extends "dashboard.html" %}
+{% block panel-body %}
+  <div class="table-responsive">
+    <div class="container">
+      <div class="row">
+          <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <form method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              <input type="file" name='empFile'>
+              <a href={% url 'employees:import_button' %}><button type="submit">Upload.</button></a>
+            </form>
+          </form>
+      </div>
+    </div>
+    <table class="table table-hover table-sm">
+    <!-- the table header -->
+      <thead>
+        <tr>
+          {% for x in formHeader %}
+          <th scope="col">{{ x }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <!-- starting the table body -->
+      <tbody>
+        <tr>
+          {% for r in formBody %}
+          {% for i in r %}
+          <td scope="row">{{ i }}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <!-- ******************************************************************************************************************************* -->
+    <nav aria-label="Page navigation example">
+      <div class="pagination justify-content-center">
+        <span class="step-links">
+          <ul class="pagination justify-content-center">
+            <li class="page-item">
+              {% if formBody.has_previous %}
+                  <a href="?page=1">&laquo; first &nbsp;</a>
+                  <a href="?page={{ formBody.previous_page_number }}">previous &nbsp;</a>
+              {% endif %}
+            </li class="page-item" class="page-item">
+            <li>
+              <span class="current" class="page-link">
+                  Page {{ formBody.number }} of {{ formBody.paginator.num_pages }}.&nbsp;&nbsp;
+              </span>
+            </li>
+            <li class="page-item" class="page-link" >
+              {% if formBody.has_next %}
+                  <a href="?page={{ formBody.next_page_number }}">next &nbsp;</a>
+                  <a href="?page={{ formBody.paginator.num_pages }}">last &raquo;</a>
+              {% endif %}
+            </li>
+          </ul>
+        </span>
+      </div>
+    </nav>
+  </div>
+  <!-- ******************************************************************************************************************************* -->
+{% endblock panel-body %}

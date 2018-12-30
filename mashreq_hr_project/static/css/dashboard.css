@@ -1,0 +1,137 @@
+body{
+    height: 100vh;
+    background: linear-gradient(360deg, rgba(0,0,0,0.75), rgba(255,255,255,1)),url('../img/dashboard-background.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size:cover;
+    
+}
+#main-panel{
+    text-align: right;
+    font-size: 1.5em;
+    /* Shadow start */
+    -webkit-box-shadow: 4px 4px 12px 0px rgba(36,58,81,0.42);
+    -moz-box-shadow: 4px 4px 12px 0px rgba(36,58,81,0.42);
+    box-shadow: 4px 4px 12px 0px rgba(36,58,81,0.42);   
+    /* Shadow End */
+    background-color: #f1f3f6;
+    position: relative;
+}
+#sidebar{
+    background-color: white;
+    border-top-left-radius: 0em;
+    border-bottom-left-radius: 0em;
+}
+#profile-pic{
+    margin-bottom: 1.5em;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top:1.5em;
+    border-radius: 2.5em;
+    width: 100%;
+    height: auto;
+    max-width: 5em;
+    max-height: 5em;
+}
+
+#panel-body{
+    padding: 3%;
+}
+#menu{
+    align-self: right;
+}
+.icon{
+    max-width: 1.1em;
+    max-height: 1.1em;
+}
+#collapse-img{
+    background-color: #243a51;
+    max-width: 2em;
+    max-height: 2em;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 1em;
+    transform: rotate(270deg);
+}
+#searchinput{
+    border-radius: 0.1em;
+}
+
+#searchicon{
+    max-width: 1.25em;
+    max-height: 1.25em;
+}
+
+#searchbutton{
+    border-radius: 0.1em;
+}
+
+#username{
+    text-align: center;
+}
+
+.hidden{
+    display: none;
+}
+.submenu{
+    font-size: 0.70em;
+    color: rgb(2, 125, 248);
+    font-weight: bold;
+}
+.submenu a{
+    display: block;
+}
+.list-group-item{
+    text-align: right;
+}
+.arrow{
+    margin-top: 9px;
+    float: left;
+}
+
+#show-image{
+    max-width: 1.25em;
+    max-height: 1.25em;
+    transform: rotate(90deg);
+    
+}
+
+#smallbar{
+    position: absolute;
+    margin-left: auto;
+    margin-right: -0.65em;
+    max-width: 2.95em;
+    z-index: 3;
+}
+
+#smallbar button{
+    border-radius: 0.1em;
+    background: #243a51
+}
+
+.settings-menu{
+    margin-right: -15px;
+}
+
+.settings-menu button{
+    font-size: 1.1em;
+}
+
+.settings-menu .dropdown-item{
+    text-align: right;
+}
+
+.settings-menu .dropdown-menu{
+    border-radius: 0.1em;
+    /* Shadow start */
+    -webkit-box-shadow: 4px 4px 12px 0px rgba(36,58,81,0.42);
+    -moz-box-shadow: 4px 4px 12px 0px rgba(36,58,81,0.42);
+    box-shadow: 4px 4px 12px 0px rgba(36,58,81,0.42);   
+    /* Shadow End */
+    z-index: 4;
+}
+
+nav{
+    font-family: 'Lateef', cursive;
+    font-size: 1.6em;
+}

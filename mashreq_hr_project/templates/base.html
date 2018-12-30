@@ -1,0 +1,77 @@
+<!doctype html> {% load staticfiles %}
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Brython files goes here if required -->
+    <script type="text/javascript" src={% static 'js/brython.js' %}></script>
+    <!-- <script type="text/javascript" src={% static 'js/brython_stdlib.js' %}></script> -->
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+    <!-- custom css files goes here -->
+    <link rel="stylesheet" href={% static 'css/base.css' %}>
+    <!-- More custom css files inside the following blocks -->
+    {% block head1 %}
+    {% endblock head1 %}
+    {% block head2 %}
+    {% endblock head2 %}
+    <!-- fonts goes here -->
+    <link href="https://fonts.googleapis.com/css?family=Lateef&amp;subset=arabic" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lalezar&amp;subset=arabic" rel="stylesheet">
+
+    <title>Moratabaty.com</title>
+</head>
+
+<body onload="brython(1)">
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href={% url 'home:landing_page' %}>مرتباتي</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            {% if not user.is_authenticated %}
+            <li class="nav-item active">
+              <a class="nav-link" href="#">الرئيسية <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="#">الخدمات</a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="#">الاسعار</a>
+            </li>
+            {% else %}
+            <li class="nav-item active">
+                <a class="nav-link" href="#">مرحباً {{user.username}}</a>
+              </li>
+            <li class="nav-item active">
+                <a class="nav-link" href={% url 'home:dashboard' %}>لوحة التحكم</a>
+              </li>
+            {% endif %}
+          </ul>
+          <ul class="navbar-nav mr-auto">
+            {% if user.is_authenticated %}
+            <li class="nav-item active">
+                <a class="nav-link" href={% url 'home:logout' %}>تسجيل الخروج</a>
+              </li>
+            {% else %}
+              <li class="nav-item active">
+                <a class="nav-link" href={% url 'home:login'  %}>تسجيل الدخول</a>
+              </li>
+            {% endif %}
+            </ul>
+        </div>
+      </nav>
+          {% block body %}
+          {% endblock body %}
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+</body>
+</html>

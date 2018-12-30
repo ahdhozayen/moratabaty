@@ -1,0 +1,119 @@
+{% extends "dashboard-viewdata.html" %}
+{% load staticfiles %}
+{% block table %}
+<table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th class="pr-4" scope="col">م</th>
+                <th scope="col">
+                <a href={% url 'banks:accounts_list' by='account_number' %} class="text-white">
+                    رقم الحساب
+                </a>
+                </th>
+                <th scope="col">
+                <a href={% url 'banks:accounts_list' by='bank_id__name' %} class="text-white">
+                    البنك
+                </a>
+                </th>
+                <th scope="col">
+                        <a href={% url 'banks:accounts_list' by='account_type' %} class="text-white">
+                            نوع الحساب  
+                            </a>
+                </th>
+                <th scope="col">تعديل</th>
+                <th scope="col">حذف</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for bank_account in bank_accounts %}
+            <tr class="table-light" id="table-row" >
+                    <td class="pr-4" scope="row" data-toggle="modal" data-target="#detail-modal-{{bank.pk}}">
+                        {{ forloop.counter }}
+                    </td>
+                    <td data-toggle="modal" data-target="#detail-modal-{{bank_account.pk}}">{{bank_account.account_number}}</td>
+                    <td data-toggle="modal" data-target="#detail-modal-{{bank_account.pk}}">{{bank_account.bank_id.name}} - {{bank_account.bank_id.branch}}</td>
+                    {% if bank_account.account_type == 'company' %}
+                    <td data-toggle="modal" data-target="#detail-modal-{{bank_account.pk}}">حساب شركة</td>
+                    {% else %}
+                    <td data-toggle="modal" data-target="#detail-modal-{{bank_account.pk}}">حساب موظف</td>
+                    {% endif %}
+                    <td> <a href={% url 'banks:edit_account' pk=bank_account.pk %}><img src={% static 'img/edit-icon.png' %} alt="edit"></a></td>
+                    <td>
+                        <a href="#" data-toggle="modal" data-target="#delete-modal-{{bank_account.pk}}">
+                            <img src={% static 'img/delete-icon.png' %} alt="delete">
+                        </a>
+                    </td>
+                    
+            </tr>
+            <!--Detail Modal -->
+            <div class="modal fade" id="detail-modal-{{bank_account.pk}}" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                <div class="modal-dialog modal modal-dialog-centered p-3" role="document">
+                <div class="modal-content p-3">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="detailModalLabel">تفاصيل الحساب:</h3>
+                    </div>
+                        <div id="detail-list" class="modal-body">
+                            <ul class="list-group">
+                                <li class="list-group-item list-group-item-primary d-flex justify-content-between align-items-center">
+                                    رقم الحساب:    
+                                    {{bank_account.account_number}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     البنك:    
+                                    {{bank_account.bank_id.name}} - {{bank_account.bank_id.branch}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    العملة:    
+                                    {{bank_account.currency_id}}
+                                </li>
+                                {% if  bank_account.account_type == 'company' %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    نوع الحساب:    
+                                    حساب شركة
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     اسم حامل الحساب:    
+                                    {{bank_account.account_company_holder}}
+                                </li>
+                                {% elif  bank_account.account_type == 'employee' %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    نوع الحساب:    
+                                    حساب موظف
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     اسم حامل الحساب:    
+                                    {{bank_account.account_employee_holder}}
+                                </li>
+                                {% endif %}
+                            </ul>
+                            <div id="detail-buttons">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+                                    <a type="button" class="btn btn-primary" href={% url 'banks:edit_account' pk=bank_account.pk %}>تعديل</a>
+                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-modal-{{bank_account.pk}}">حذف</button>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="delete-modal-{{bank_account.pk}}" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                    <div class=" modal-dialog modal modal-dialog-centered w-50 p-3" role="document">
+                    <div class="modal-content alert">
+                        <div class="modal-header">
+                            <h3 class="modal-title" id="detailModalLabel">هل أنت متأكد؟</h3>
+                        </div>
+                            <div class="modal-body">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+                                    <a type="button" class="btn btn-danger" href={% url 'banks:delete_account' pk=bank_account.pk %}>نعم، احذف</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        {% endfor %}
+        </tbody>
+    </table> 
+
+{% endblock table %}
+
+
+        
+        

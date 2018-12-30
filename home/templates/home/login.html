@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block head1 %}
+<link rel="stylesheet" href={% static 'css/login.css' %}>
+{% endblock head1 %}
+{% block body %}
+<br>
+<br>
+<br>
+<br>
+<div class="container">
+        <div class="row">
+                        <!-- Messages -->
+                        <div class="col-lg-3 col-sm-12"></div>
+                        {% if messages %}
+                        {% for message in messages %}
+                        {% if message.level == 25 %}
+                        <div class="alert alert-dismissible alert-success col-lg-6 col-md-12">
+                                {{ message }}
+                        </div>
+                        {% elif message.level == 40 %} 
+                        <div class="alert alert-dismissible alert-danger col-lg-6 col-md-12">
+                                {{ message }}
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                        {% endif %}
+                </div>
+                <br>
+        <div class="row">
+                <div class="col-lg-4"></div>
+                {% if user.is_authenticated %}
+                <div class="alert alert-dismissible alert-success col-lg-4 col-md-12">
+                        لقد قمت بالفعل بالتسجيل، اضغط <a class="alert-link" href={% url 'home:dashboard' %}>هنا</a> للذهاب الى لوحة التحكم
+                </div>  
+                {% else %}
+                <form id="login-form" class="col-lg-4 col-sm-12 card" method="POST">
+                        <h1>برجاء ادخال البيانات المطلوبة:</h1>
+                        {% csrf_token %}
+                        <div class="form-group">
+                                <label for="user-name">اسم المستخدم:</label>
+                                <input type="text" class="form-control" placeholder="اسم المستخدم" name="username" id="user-name">
+                        </div>
+                        <div class="form-group">
+                                <label for="password">كلمة السر:</label>
+                                <input type="password" class="form-control" name="password" id="password" placeholder="كلمة السر">
+                        </div>
+                        <input id="login-btn" type="submit" class="btn btn-primary" value="تسجيل الدخول">
+                </form>
+                {% endif %}
+        </div>
+        <br>    
+</div>
+
+
+{% endblock body %}
+</div>

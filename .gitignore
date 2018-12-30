@@ -1,0 +1,8 @@
+django-venv
+__pycache__
+.vscode/settings.json
+.vscode/launch.json
+.vscode/.ropeproject/config.py
+.vscode/.ropeproject/objectdb
+mashreq_hr_project/media
+payroll/temporary_payslips/*.pdf

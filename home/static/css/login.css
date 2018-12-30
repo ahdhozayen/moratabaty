@@ -1,0 +1,50 @@
+body{
+    text-align: right;
+}
+
+.alert{
+    font-size: 1.5em;
+    /* Shadow start */
+    -webkit-box-shadow: 4px 4px 12px 0px rgba(36,58,81,0.42);
+    -moz-box-shadow: 4px 4px 12px 0px rgba(36,58,81,0.42);
+    box-shadow: 4px 4px 12px 0px rgba(36,58,81,0.42);   
+    /* Shadow End */
+    justify-self: center;
+}
+#login-form{
+    font-size: 1.65em;
+    background-color: #f1f3f6;
+    
+}
+#login-form div input{
+    border-radius: 0.1em;
+    /* Shadow start */
+    -webkit-box-shadow: 4px 4px 12px 0px rgba(36,58,81,0.42);
+    -moz-box-shadow: 4px 4px 12px 0px rgba(36,58,81,0.42);
+    box-shadow: 4px 4px 12px 0px rgba(36,58,81,0.42);   
+    /* Shadow End */
+}
+#login-form h1{
+    text-align: center;
+}
+#login-btn{
+    font-size: 0.8em;
+    margin-right:auto;
+    border-radius: 0.1em;
+    /* Shadow start */
+    -webkit-box-shadow: 4px 4px 12px 0px rgba(36,58,81,0.42);
+    -moz-box-shadow: 4px 4px 12px 0px rgba(36,58,81,0.42);
+    box-shadow: 4px 4px 12px 0px rgba(36,58,81,0.42);   
+    /* Shadow End */
+    font-weight: bold;
+}
+
+.card{
+    padding:2em;
+    border-radius: 0.1em;
+    /* Shadow start */
+    -webkit-box-shadow: 4px 4px 12px 0px rgba(36,58,81,0.42);
+    -moz-box-shadow: 4px 4px 12px 0px rgba(36,58,81,0.42);
+    box-shadow: 4px 4px 12px 0px rgba(36,58,81,0.42);   
+    /* Shadow End */
+}

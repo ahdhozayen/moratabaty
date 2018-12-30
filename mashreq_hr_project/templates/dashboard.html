@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block head1 %}
+<link rel="stylesheet" href={% static 'css/dashboard.css' %}> {% endblock head1 %} {% block body %}
+<br>
+<br>
+<br>
+<br>
+<div class="container">
+    <div id="main-panel" class="card col-12">
+        <div class="row">
+            <!-- The small bar is hidden by default -->
+            <div id="smallbar" class="col-lg-2 col-sm-4 hidden btn-group-vertical">
+                    <!-- Show sidebar button -->
+                    <button id="show" type="button" class="col-12 btn">
+                            <img id="show-image" src={% static "img/expand-icon-light.png" %} alt="open side bar">
+                        </button>
+                    <button class="col-12 btn">
+                        <img class="icon" src={% static "img/employees-icon-light.png" %} alt="">
+                    </button>
+
+                    <button class="col-12 btn">
+                        <img class="icon" src={% static "img/attendance-icon-light.png" %} alt="">
+                    </button>
+
+                    <button class="col-12 btn">
+                        <img class="icon" src={% static "img/payroll-icon-light.png" %} alt="">
+                    </button>
+
+                    <button class="col-12 btn">
+                        <img class="icon" src={% static "img/company-icon-light.png" %} alt="">
+                    </button>
+
+                    <button class="col-12 btn">
+                        <img class="icon" src={% static "img/banks-icon-light.png" %} alt="">
+                    </button>
+
+                    <button class="col-12 btn">
+                        <img class="icon" src={% static "img/settings-icon-light.png" %} alt="">
+                    </button>
+            </div>
+            <div id="sidebar" class="card col-lg-2 col-md-3 col-sm-12">
+                <!-- profile pic -->
+                {% if user.employee.picture %}
+                <img id="profile-pic" src={{ user.employee.picture.url }} alt="">
+                {% else %}
+                <img id="profile-pic" src={% static "img/nobody-profile.jpg" %} alt="">
+                {% endif %}
+                {% if user.first_name %}
+                {% if user.last_name %}
+                    <h2 id="username">{{ user.first_name }} {{user.last_name}}</h2>
+                {% else %}
+                    <h2 id="username">{{ user.first_name }}</h2>
+                {% endif %}
+                {% else %}
+                <h2 id="username">{{ user.username }}</h2>
+                {% endif %}
+                <!-- Collapse button -->
+                <button id="collapse-btn" type="button" class="btn btn-link">
+                    <img id="collapse-img"  src={% static "img/expand-icon-light.png" %} alt="collapse side bar">
+                </button>
+                <!-- search bar -->
+                <div id="searchbar" class="container" >
+                    <form method="POST" class="form-group">
+                    <div class="row">
+                            <input class="form-control col-8" type="text" name="search" id="searchinput" placeholder="بحث..">
+                            <button class="btn btn-primary col-4" type="submit" id="searchbutton"><img id="searchicon" src={% static "img/search-icon.png" %} alt="search"></button>
+                        </div>
+                    </form>
+                </div>
+                <!-- End of Search bar -->
+                <div id="menu" class="list-group-flush">
+                    <button id="company-menu" class="list-group-item col-12">
+                            <img class="icon" src={% static "img/company-icon.png" %} alt=""> الشركة
+                            <img class="icon arrow" src={% static "img/collapse-icon.png" %} style="transform: rotate(90deg)">
+                        </button>
+                        <div id="company-submenu" class="hidden submenu">
+                                <li class="list-group-item">
+                                    <a href={% url 'companies:branches_list' by='' %}>الافرع</a>
+                                </li>
+                                <li class="list-group-item">
+                                        <a href={% url 'companies:departments_list' by='' %}>الادارات</a>
+                                </li>
+                                <li class="list-group-item">
+                                        <a href={% url 'companies:sections_list' by='' %}>الاقسام</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href={% url 'companies:sub_sections_list' by='' %}>الوظائف</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href={% url 'companies:degrees_list' by='' %}>الدرجات</a>
+                                    </li>
+                                <li class="list-group-item">
+                                    <a href="{% url 'companies:settings' %}">
+                                        <img class="icon" src={% static "img/settings-icon.png" %} alt=""> اعدادات الشركة
+                                    </a>
+                                    </li>
+                        </div>
+                    <button id="employees-menu" class="list-group-item col-12">
+                        <img class="icon" src={% static "img/employees-icon.png" %} alt="">الموظفين
+                        <img class="icon arrow" src={% static "img/collapse-icon.png" %} style="transform: rotate(90deg)">
+                    </button>
+                    <div id="employees-submenu" class="hidden submenu">
+                            <li class="list-group-item">
+                                     <a href={% url 'employees:employees_list' by='' %}>الموظفين</a>
+                                </li>
+                        <li class="list-group-item">
+
+                        <div class="btn-group settings-menu" role="group">
+                                <button id="employee-group-drop" type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <img class="icon" src={% static "img/settings-icon.png" %} alt="">اعدادات الموظفين
+                                </button>
+                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                <a class="dropdown-item" href="{% url 'employees:contracts_list' by='' %}">انواع التعاقد</a>
+                                <a class="dropdown-item" href="{% url 'employees:id_documents_list' by='' %}">انواع وثائق الهوية</a>
+                                <a class="dropdown-item" href="{% url 'employees:education_degrees_list' by='' %}">الدرجات التعليمية</a>
+                                <a class="dropdown-item" href="{% url 'employees:genders_list' by='' %}">انواع الموظفين</a>
+                                <a class="dropdown-item" href="{% url 'employees:social_status_list' by='' %}">الحالات الاجتماعية</a>
+                                <a class="dropdown-item" href="{% url 'employees:military_status_list' by='' %}">الموقف من التجنيد</a>
+                                <a class="dropdown-item" href="{% url 'employees:religions_list' by='' %}">الديانات</a>
+                            </div>
+                        </div>
+                    </li>
+                    </div>
+                    <button id="banks-menu" class="list-group-item col-12">
+                            <img class="icon" src={% static "img/banks-icon.png" %} alt=""> البنوك
+                            <img class="icon arrow" src={% static "img/collapse-icon.png" %} style="transform: rotate(90deg)">
+                        </button>
+                        <div id="banks-submenu" class="hidden submenu">
+                                <li class="list-group-item">
+                                    <a href={% url 'banks:banks_list' by='' %}>البنوك</a>
+                                     </li>
+                                <li class="list-group-item">
+                                    <a href={% url 'banks:accounts_list' by='' %}>الحسابات</a>
+                                </li>
+                        </div>
+                    <button id="attendance-menu" class="list-group-item col-12">
+                        <img class="icon" src={% static "img/attendance-icon.png" %} alt=""> الحضور
+                        <img class="icon arrow" src={% static "img/collapse-icon.png" %} style="transform: rotate(90deg)">
+                    </button>
+                    <div id="attendance-submenu" class="hidden submenu">
+                            <li class="list-group-item">
+                                <a href={% url 'attendance:attendance_list' by='' %}>الحضور</a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href={% url 'attendance:attendance_settings' by='' %}>
+                                    <img class="icon" src={% static "img/settings-icon.png" %} alt=""> اعدادات الحضور
+                                </a>
+                                </li>
+                    </div>
+                    <button id="payroll-menu" class="list-group-item col-12">
+                        <img class="icon" src={% static "img/payroll-icon.png" %} alt=""> المرتبات
+                        <img class="icon arrow" src={% static "img/collapse-icon.png" %} style="transform: rotate(90deg)">
+                    </button>
+                    <div id="payroll-submenu" class="hidden submenu">
+                            <li class="list-group-item">
+                                <a href={% url 'payroll:salaries_list' by='' %}>المرتبات</a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href={% url 'payroll:copy_salaries' %}>انشاء سريع من مرتبات شهر سابق</a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href={% url 'payroll:send_payslips' %}>ارسال قسائم القبض</a>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="btn-group settings-menu" role="group">
+                                        <button id="payroll-group-drop" type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <img class="icon" src={% static "img/settings-icon.png" %} alt="">اعدادات المرتبات
+                                        </button>
+                                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                        <a class="dropdown-item" href={% url 'payroll:salary_element_types_list' by='' %}>انواع بنود المرتب</a>
+                                        <a class="dropdown-item" href={% url 'payroll:insurance_rules_list' by='' %}>قواعد احتساب التأمينات</a>
+                                        <a class="dropdown-item" href={% url 'payroll:tax_rules_list' by='' %}>قواعد احتساب الضريبة</a>
+                                        <a class="dropdown-item" href={% url 'payroll:custom_rules_list' by='' %}>قواعد احتساب مخصصة</a>
+                                    </div>
+                                </div>
+                            </li>
+                    </div>
+                    <button id="setting-menu" class="list-group-item col-12">
+                    	<img class="icon" src={% static "img/settings-icon.png" %} alt=""> اعدادات
+                    	<img class="icon arrow" src={% static "img/collapse-icon.png" %} style="transform: rotate(90deg)">
+                    </button>
+                    <div id="setting-submenu" class="hidden submenu">
+                    	<li class="list-group-item">
+                    		<a href={% url 'employees:import_export' %}>Import Date</a>
+                    	</li>
+                    </div>
+                </div>
+            </div>
+            <div id="panel-body" class="col">
+                {% block panel-body %}
+                {% endblock panel-body %}
+            </div>
+    </div>
+</div>
+</div>
+<br>
+<br>
+<script type="text/python" src={% static 'py/mashreq_hr_project.py' %}></script>
+{% endblock body %}

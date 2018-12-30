@@ -1,0 +1,117 @@
+{% extends "dashboard-viewdata.html" %}
+{% load staticfiles %}
+{% load extra_tags %}
+{% block table %}
+<table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th class="pr-4" scope="col">م</th>
+                <th scope="col">
+                <a href={% url 'companies:degrees_list' by='name' %} class="text-white">
+                    اسم الدرجة
+                </a>
+                </th>
+                <th scope="col">
+                <a href={% url 'companies:degrees_list' by='sub_section_id__name' %} class="text-white">
+                    الوظيفة التابعة لها
+                    </a>
+                </th>
+                <th scope="col">
+                        <a href={% url 'companies:degrees_list' by='sub_section_id__section_id__name' %} class="text-white">
+                        القسم
+                            </a>
+                    </th>
+                <th scope="col">
+                        <a href={% url 'companies:degrees_list' by='sub_section_id__section_id__department_id__name' %} class="text-white">
+                        الادارة
+                        </a>
+                </th>
+                <th scope="col">
+                        <a href={% url 'companies:degrees_list' by='sub_section_id__section_id__department_id__branch_id__name' %} class="text-white">
+                        الفرع
+                        </a>
+                </th>
+                <th scope="col">تعديل</th>
+                <th scope="col">حذف</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for degree in degrees %}
+            <tr class="table-light" id="table-row" >
+                    <td class="pr-4" scope="row" data-toggle="modal" data-target="#detail-modal-{{degree.pk}}">
+                        {{ forloop.counter }}
+                    </td>
+                    <td data-toggle="modal" data-target="#detail-modal-{{degree.pk}}">{{degree.name}}</td>
+                    <td data-toggle="modal" data-target="#detail-modal-{{degree.pk}}">{{degree.sub_section_id|d_arrow_split}}</td>
+                    <td data-toggle="modal" data-target="#detail-modal-{{degree.pk}}">{{degree.sub_section_id.section_id|d_arrow_split}}</td>
+                    <td data-toggle="modal" data-target="#detail-modal-{{degree.pk}}">{{degree.sub_section_id.section_id.department_id|d_arrow_split}}</td>
+                    <td data-toggle="modal" data-target="#detail-modal-{{degree.pk}}">{{degree.sub_section_id.section_id.department_id.branch_id|d_arrow_split}}</td>
+                    <td> <a href={% url 'companies:edit_degree' pk=degree.pk %}><img src={% static 'img/edit-icon.png' %} alt="edit"></a></td>
+                    <td>
+                        <a href="#" data-toggle="modal" data-target="#delete-modal-{{degree.pk}}">
+                            <img src={% static 'img/delete-icon.png' %} alt="delete">
+                        </a>
+                    </td>
+                    
+            </tr>
+            <!--Detail Modal -->
+            <div class="modal fade" id="detail-modal-{{degree.pk}}" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                <div class="modal-dialog modal modal-dialog-centered p-3" role="document">
+                <div class="modal-content p-3">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="detailModalLabel">تفاصيل الدرجة:</h3>
+                    </div>
+                        <div id="detail-list" class="modal-body">
+                            <ul class="list-group">
+                                <li class="list-group-item list-group-item-primary d-flex justify-content-between align-items-center">
+                                    اسم الدرجة:
+                                    {{degree.name}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    الوظيفة التابعة لها:    
+                                    {{degree.sub_section_id|d_arrow_split}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    القسم:    
+                                    {{degree.sub_section_id.section_id|d_arrow_split}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    الادارة:    
+                                    {{degree.sub_section_id.section_id.department_id|d_arrow_split}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    الفرع:    
+                                    {{degree.sub_section_id.section_id.department_id.branch_id|d_arrow_split}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    عدد الموظفين الحاصلين على هذة الدرجة : 
+                                    <span class="badge badge-primary badge-pill">{{degree.employees.all|length}}</span>
+                                </li>
+                            </ul>
+                            <div id="detail-buttons">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+                                    <a type="button" class="btn btn-primary" href={% url 'companies:edit_degree' pk=degree.pk %}>تعديل</a>
+                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-modal-{{degree.pk}}">حذف</button>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="delete-modal-{{degree.pk}}" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                    <div class=" modal-dialog modal modal-dialog-centered w-50 p-3" role="document">
+                    <div class="modal-content alert">
+                        <div class="modal-header">
+                            <h3 class="modal-title" id="detailModalLabel">هل أنت متأكد؟</h3>
+                        </div>
+                            <div class="modal-body">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+                                    <a type="button" class="btn btn-danger" href={% url 'companies:delete_degree' pk=degree.pk %}>نعم، احذف</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        {% endfor %}
+        </tbody>
+    </table> 
+
+{% endblock table %}

@@ -1,0 +1,24 @@
+{% extends "dashboard.html" %}
+{% load staticfiles %}
+{% load bootstrap4 %}
+{% block head2 %}
+  <link rel="stylesheet" href={% static "css/payslips_sending_form.css" %}>
+{% endblock head2 %}
+{% block panel-body %}
+<div class="container">
+    <div class="row">
+        <h1 class="col-lg-9 col-md-6 col-sm-12" id="title">ارسال قسائم القبض بالبريد الالكترونى</h1>
+    </div>
+    <div class="row">
+        <div class="col-3"></div>
+        <div id="send-form" class="card col-6 p-5 mt-3">
+            <form method="POST">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                <input id="send-btn" class="btn btn-primary" role="button" type="submit" value="ارسال">
+            </form>
+            <p class="alert alert-primary mt-3">ملحوظة: هذة العملية قد تأخذ الكثير من الوقت، لذلك قم بالانتظار بعد الارسال و لا تغلق المتصفح الى أن يتم توجيهك تلقائيا الى صفحة تقرير الارسال.</p>
+        </div>
+    </div>
+</div>
+{% endblock panel-body %}

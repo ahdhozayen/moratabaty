@@ -1,0 +1,238 @@
+{% extends "dashboard-viewdata.html" %}
+{% load staticfiles %}
+{% load extra_tags %}
+{% block table %}
+
+<table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th class="pr-4" scope="col">م</th>
+                <th scope="col">
+                    <a href={% url 'employees:employees_list' by='first_name' %} class="text-white">
+                        اسم الموظف
+                    </a>
+                </th>
+                <th scope="col">
+                        <a href={% url 'employees:employees_list' by='branch_id' %} class="text-white">
+                        الفرع   
+                        </a>
+                </th>
+                <th scope="col">
+                        <a href={% url 'employees:employees_list' by='department_id' %} class="text-white">
+                        الادارة
+                        </a>
+                </th>
+                <th scope="col">
+                        <a href={% url 'employees:employees_list' by='sub_section_id' %} class="text-white">
+                        الوظيفة 
+                        </a>
+                    </th>
+                <th scope="col">تعديل</th>
+                <th scope="col">ايقاف</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for employee in employees %}
+            {% if employee.is_active %}
+            <tr class="table-light" id="table-row" >
+            {% else %}
+            <tr class="table-disabled" id="table-row" >
+            {% endif %}
+                    <td class="pr-4" scope="row">
+                        {{ forloop.counter }}
+                    </td>
+                    <td data-toggle="modal" data-target="#detail-modal-{{employee.pk}}">{{employee.first_name}} {{employee.last_name}}</td>
+                    <td data-toggle="modal" data-target="#detail-modal-{{employee.pk}}">{{employee.branch_id|d_arrow_split}}</td>
+                    <td data-toggle="modal" data-target="#detail-modal-{{employee.pk}}">{{employee.department_id|d_arrow_split}}</td>
+                    <td data-toggle="modal" data-target="#detail-modal-{{employee.pk}}">{{employee.sub_section_id|d_arrow_split}}</td>
+                    {% if employee.is_active %}
+                    <td> <a href={% url 'employees:edit_employee' pk=employee.pk %}><img src={% static 'img/edit-icon.png' %} alt="edit"></a></td>
+                    <td>
+                        <a href="#" data-toggle="modal" data-target="#disable-modal-{{employee.pk}}">
+                            <img src={% static 'img/disable-icon.png' %} alt="delete">
+                        </a>
+                    </td>
+                    {% else %}
+                    <td> <a><img src={% static 'img/edit-icon.png' %} alt="edit"></a></td>
+                    <td>
+                        <a>
+                            <img src={% static 'img/disable-icon.png' %} alt="delete">
+                        </a>
+                    </td>
+                    {% endif %}
+
+            </tr>
+            <!--Detail Modal -->
+            <div class="modal fade" id="detail-modal-{{employee.pk}}" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered p-3" role="document">
+                <div class="modal-content p-3">
+                    <div class="modal-header">
+                        {% if employee.is_active %}
+                        <h3 class="modal-title" id="detailModalLabel">بيانات الموظف:</h3>
+                        {% else %}
+                        <h3 class="modal-title" id="detailModalLabel">بيانات الموظف (هذا البيان تم ايقافة):</h3>
+                        {% endif %}
+                    </div>
+                        <div id="detail-list" class="modal-body container">
+                            <div class="row">
+                            <ul class="list-group col-lg-6 col-sm-12" style="max-width: 325px;">
+                                {% if employee.is_active %}
+                                <li class="list-group-item list-group-item-primary d-flex justify-content-between align-items-center">
+                                {% else %}
+                                <li class="list-group-item list-group-item-danger d-flex justify-content-between align-items-center">
+                                {% endif %}
+                                    اسم الموظف:
+                                    {{employee.first_name}} {{employee.last_name}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    صورة الموظف:
+                                    <!-- profile pic -->
+                                    {% if employee.picture %}
+                                    <img id="profile-pic" src={{ employee.picture.url }} alt="">
+                                    {% else %}
+                                    <img id="profile-pic" src={% static "img/nobody-profile.jpg" %} alt="">
+                                    {% endif %}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        رقم الموظف:
+                                        {{employee.employee_number}}
+                                    </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        البريد الالكتروني:
+                                        <a href="mailto:{{employee.email}}">{{employee.email}}</a>
+                                    </div>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    الفرع:
+                                    {{employee.branch_id|d_arrow_split}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        الادارة:
+                                        {{employee.department_id|d_arrow_split}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        القسم:
+                                        {{employee.section_id|d_arrow_split}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        الوظيفة:
+                                        {{employee.sub_section_id|d_arrow_split}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        الدرجة:
+                                        {{employee.degree|d_arrow_split}}
+                                </li>
+
+
+
+                            </ul>
+                            <ul class="list-group col-lg-6 col-sm-12" style="max-width: 325px;margin:auto;">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            نوع وثيقة الهوية:
+                                            {{employee.id_type|slash_split}}
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            رقم وثيقة الهوية:
+                                            {{employee.id_number|slash_split}}
+                                        </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            نوع التعاقد:
+                                            {{employee.contract_type|slash_split}}
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            تاريخ التعيين:
+                                            {{employee.date_of_hiring|slash_split}}
+                                        </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    تاريخ الميلاد:
+                                    {{employee.date_of_birth|slash_split}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    محل الميلاد:
+                                    {{employee.place_of_birth|slash_split}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    الجنسية:
+                                    {{employee.nationality|slash_split}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    مجال الدراسة:
+                                    {{employee.field_of_study|slash_split}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    الدرجة التعليمية:
+                                    {{employee.education_degree|slash_split}}
+                                </li>
+
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    النوع:
+                                    {{employee.gender|slash_split}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    الحالة الاجتماعية:
+                                    {{employee.social_status|slash_split}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    الموقف من التجنيد:
+                                    {{employee.military_status|slash_split}}
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    الديانة:
+                                    {{employee.religion|slash_split}}
+                                </li>
+                            </ul>
+                        </div>
+
+                            <div id="detail-buttons">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+                                    {% if employee.is_active %}
+                                    <a type="button" class="btn btn-primary" href={% url 'employees:edit_employee' pk=employee.pk %}>تعديل</a>
+                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#disable-modal-{{employee.pk}}">ايقاف</button>
+                                    {% endif %}
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="disable-modal-{{employee.pk}}" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                <div class=" modal-dialog modal modal-dialog-centered w-50 p-3" role="document">
+                <div class="modal-content alert">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="detailModalLabel">هل أنت متأكد؟</h3>
+                    </div>
+                        <div class="modal-body">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+                                <a type="button" class="btn btn-danger" href={% url 'employees:disable_employee' pk=employee.pk %}>نعم، ايقاف</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        </tbody>
+    </table>
+<div class="container">
+  <div class="row">
+    <h1 class="col-lg-9 col-md-6 col-sm-12" id="title"></h1>
+    <div id="action-bar" class="col-lg-3 col-md-6 col-sm-12">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#export">
+                <h5>أستخراج الموظفين</h5>
+            </button>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="export" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class=" modal-dialog modal modal-dialog-centered w-50 p-3" role="document">
+    <div class="modal-content alert">
+        <div class="modal-header">
+            <h3 class="modal-title" id="detailModalLabel">هل أنت متأكد؟</h3>
+        </div>
+            <div class="modal-body">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">أغلاق</button>
+                    <a href={% url 'employees:export_button' %}>نعم </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock table %}

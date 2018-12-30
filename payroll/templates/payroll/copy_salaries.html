@@ -1,0 +1,24 @@
+{% extends "dashboard.html" %}
+{% load staticfiles %}
+{% load bootstrap4 %}
+{% block head2 %}
+  <link rel="stylesheet" href={% static "css/copy_salaries.css" %}>
+{% endblock head2 %}
+{% block panel-body %}
+<div class="container">
+    <div class="row">
+        <h1 class="col-lg-9 col-md-6 col-sm-12" id="title">انشاء سريع لمرتبات جديدة من مرتبات شهر سابق</h1>
+    </div>
+    <div class="row">
+        <div class="col-3"></div>
+        <div id="copy-form" class="card col-6 p-5 mt-3">
+            <form method="POST">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                <input id="copy-btn" class="btn btn-primary" role="button" type="submit" value="نسخ">
+            </form>
+            <p class="alert alert-primary mt-3">سيتم عمل نسخة من مرتبات الشهر الذى ستختارة للشهر الجديد، يمكنك بعد ذلك تعديل مرتب كل موظف على حدة.</p>
+        </div>
+    </div>
+</div>
+{% endblock panel-body %}

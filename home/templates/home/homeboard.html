@@ -1,0 +1,84 @@
+{% extends "dashboard.html" %}
+{% block panel-body %}
+<div class="card border-secondary mb-3">
+        <div class="card-header border-secondary">
+            اسم الشركة:
+            {{company.name}}
+        </div>
+        <div class="card-body">
+          <h4 class="card-title">
+              اجمالي عدد الموظفين بالشركة: {{company.employees.all.count}}
+          </h4>
+          <u><h4>أفرع الشركة:</h4></u>
+          {% for branch in company.branches.all  %}
+          <div class="card border-primary mb-3">
+                <div class="card-header border-primary">
+                    اسم الفرع:
+                    {{branch.name}}
+                </div>
+                <div class="card-body">
+                  <h4 class="card-title">
+                      اجمالي عدد الموظفين بالفرع: {{branch.employees.all.count}}
+                  </h4>
+                  <u><h4>الادارات الموجودة بالفرع:</h4></u> 
+                  {% for department in branch.departments.all %}
+                  <div class="card border-success mb-3">
+                        <div class="card-header border-success">
+                            اسم الادارة:
+                            {{department.name}}
+                        </div>
+                        <div class="card-body">
+                          <h4 class="card-title">
+                              اجمالي عدد الموظفين بالادارة: {{department.employees.all.count}}
+                          </h4>
+                          <u><h4> الأقسام الموجودة بالفرع:</h4></u>
+                          {% for section in department.sections.all %}
+                          <div class="card border-warning mb-3">
+                            <div class="card-header border-warning">
+                                اسم القسم:
+                                {{section.name}}
+                            </div>
+                            <div class="card-body">
+                                <h4 class="card-title">
+                                    اجمالي عدد الموظفين بالقسم: {{section.employees.all.count}}
+                                </h4>
+                                <u><h4> الوظائف الموجودة بالفرع:</h4></u>
+                                {% for sub_section in section.subsections.all  %}
+                                <div class="card border-danger mb-3">
+                                    <div class="card-header border-danger">
+                                        اسم الوظيفة:
+                                        {{sub_section.name}}
+                                    </div>
+                                    <div class="card-body">
+                                        <h4 class="card-title">
+                                            اجمالي عدد الموظفين بهذة الوظيفة: {{sub_section.employees.all.count}}
+                                        </h4>
+                                        <u><h4> الدرجات المسجلة على الوظيفة:</h4></u>
+                                        {% for degree in sub_section.degrees.all %}
+                                        <div class="card border-info mb-3">
+                                            <div class="card-header border-info">
+                                                اسم الدرجة:
+                                                {{degree.name}}
+                                            </div>
+                                            <div class="card-body">
+                                                <h4 class="card-title">
+                                                    اجمالي عدد الموظفين المسجلين على هذة الدرجة: {{degree.employees.all.count}}
+                                                </h4>
+                                            </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            </div>                            
+                          {% endfor %}
+                        </div>
+                      </div>
+                  {% endfor %}
+                </div>
+              </div>
+          {% endfor %}
+        </div>
+      </div>
+{% endblock panel-body %}

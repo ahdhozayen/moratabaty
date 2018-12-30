@@ -1,0 +1,5 @@
+This file is a dummy file, that doesn't contain any important data
+The reason for the existence of this file is to keep the containing directory tracked under the git repo
+The containing directory is always empty, because it is just a place to receive temporary generated payslips
+that get's deleted directly after sending them
+And because it is empty, it will not be tracked by the git repo, unless it contains any files.
