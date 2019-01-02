@@ -1,77 +1,257 @@
-<!doctype html> {% load staticfiles %}
+<!doctype html>
+{% load staticfiles %}
 <html lang="en">
-
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
     <!-- Brython files goes here if required -->
     <script type="text/javascript" src={% static 'js/brython.js' %}></script>
     <!-- <script type="text/javascript" src={% static 'js/brython_stdlib.js' %}></script> -->
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-
+    <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <!-- custom css files goes here -->
-    <link rel="stylesheet" href={% static 'css/base.css' %}>
+    <!-- <link rel="stylesheet" href={% static 'css/base.css' %}> -->
+
+    <!-- Custom fonts for this template-->
+    <link href="/static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
+    <!-- Page level plugin CSS-->
+    <link href="/static/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="/static/css/sb-admin.css" rel="stylesheet">
     <!-- More custom css files inside the following blocks -->
     {% block head1 %}
     {% endblock head1 %}
     {% block head2 %}
     {% endblock head2 %}
     <!-- fonts goes here -->
-    <link href="https://fonts.googleapis.com/css?family=Lateef&amp;subset=arabic" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Lalezar&amp;subset=arabic" rel="stylesheet">
+    <!-- <link href="https://fonts.googleapis.com/css?family=Lateef&amp;subset=arabic" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lalezar&amp;subset=arabic" rel="stylesheet"> -->
 
     <title>Moratabaty.com</title>
 </head>
 
-<body onload="brython(1)">
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <a class="navbar-brand" href={% url 'home:landing_page' %}>مرتباتي</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav">
-            {% if not user.is_authenticated %}
-            <li class="nav-item active">
-              <a class="nav-link" href="#">الرئيسية <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item active">
-              <a class="nav-link" href="#">الخدمات</a>
-            </li>
-            <li class="nav-item active">
-              <a class="nav-link" href="#">الاسعار</a>
-            </li>
-            {% else %}
-            <li class="nav-item active">
-                <a class="nav-link" href="#">مرحباً {{user.username}}</a>
-              </li>
-            <li class="nav-item active">
-                <a class="nav-link" href={% url 'home:dashboard' %}>لوحة التحكم</a>
-              </li>
-            {% endif %}
-          </ul>
+<body onload="brython(1)" id="page-top">
+
+  <div>
+    <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
+
+    <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
+      <i class="fas fa-bars"></i>
+    </button>
+    <a class="navbar-brand mr-1" href={% url 'home:landing_page' %}>مرتباتي</a>
+
+    <!-- Navbar Search -->
+    <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+        <div class="input-group-append">
+          <button class="btn btn-primary" type="button">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+      </div>
+    </form>
+    <h6><font color="white">مرحباً {{user.username}}</font></h6>
+    <!-- Navbar -->
+    <ul class="navbar-nav ml-auto ml-md-0">
+      <li class="nav-item dropdown no-arrow mx-1">
+        <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-bell fa-fw"></i>
+          <!-- <span class="badge badge-danger">9+</span> -->
+        </a>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="alertsDropdown">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown no-arrow mx-1">
+        <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-envelope fa-fw"></i>
+          <!-- <span class="badge badge-danger">7</span> -->
+        </a>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="messagesDropdown">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown no-arrow">
+        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-user-circle fa-fw"></i>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+          <a class="dropdown-item" href={% url 'home:landing_page' %}>مرتباتي</a>
+          <a class="dropdown-item" href={% url 'home:dashboard' %}>لوحة التحكم</a>
+          <!-- <a class="dropdown-item" href="#">مرحباً {{user.username}}</a> -->
+          <div class="dropdown-divider"></div>
           <ul class="navbar-nav mr-auto">
             {% if user.is_authenticated %}
-            <li class="nav-item active">
-                <a class="nav-link" href={% url 'home:logout' %}>تسجيل الخروج</a>
-              </li>
+                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">تسجيل الخروج</a>
             {% else %}
-              <li class="nav-item active">
-                <a class="nav-link" href={% url 'home:login'  %}>تسجيل الدخول</a>
-              </li>
+                <a class="dropdown-item" href={% url 'home:login'  %}>تسجيل الدخول</a>
             {% endif %}
             </ul>
+          <!-- <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">تسجيل الخروج</a> -->
         </div>
-      </nav>
-          {% block body %}
-          {% endblock body %}
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+      </li>
+    </ul>
+  </nav>
+  <!-- Logout Modal-->
+  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">مستـــعد للمغـــادرة؟</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">هل انت متأكد من الخروج</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">الغـــاء</button>
+          <a class="btn btn-primary" href={% url 'home:logout' %}>خـــروج</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="wrapper">
+  <!-- Sidebar -->
+  <ul class="sidebar navbar-nav">
+    <li class="nav-item active" >
+      <a class="nav-link" href={% url 'home:dashboard' %}>
+        <i class="fas fa-fw fa-tachometer-alt"></i>
+        <span>لــوحة التحكم</span>
+      </a>
+    </li>
+    <!-- sidebar company menu -->
+    <li class="nav-item dropdown">
+      <a  class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-building"></i>
+        <span>الشركة</span>
+      </a>
+      <div class="dropdown-menu" aria-labelledby="company">
+        <a class="dropdown-item" href="{% url 'companies:settings' %}">اعدادات الشركة</a>
+        <a class="dropdown-item" href={% url 'companies:branches_list' by='' %}>الأفرع</a>
+        <a class="dropdown-item" href={% url 'companies:departments_list' by='' %}>الأدارات</a>
+        <!-- <div class="dropdown-divider"></div> -->
+        <!-- <h6 class="dropdown-header" href="404.html">الأقسام</h6> -->
+        <a class="dropdown-item" href={% url 'companies:sections_list' by='' %}>الأقســام</a>
+        <a class="dropdown-item" href={% url 'companies:sub_sections_list' by='' %}>الوظائف</a>
+        <a class="dropdown-item" href={% url 'companies:degrees_list' by='' %}>الدرجات</a>
+      </div>
+    </li>
+
+    <!-- sidebar Banks menu -->
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="bank" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-university"></i>
+        <span>البنوك</span>
+      </a>
+      <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+        <a class="dropdown-item" href="{% url 'banks:banks_list' by='' %}">البنوك</a>
+        <a class="dropdown-item" href="{% url 'banks:accounts_list' by='' %}">الحسابات</a>
+      </div>
+    </li>
+
+    <!-- sidebar Employees menu -->
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="employee" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-users"></i>
+        <span>المـوظفين</span>
+      </a>
+      <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+        <a class="dropdown-item" href="{% url 'employees:employees_list' by='' %}">عرض الموظفين</a>
+        <h6 class="dropdown-header">اعدادات الموظفين</h6>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="{% url 'employees:contracts_list' by='' %}">انواع التعاقدات</a>
+        <a class="dropdown-item" href="{% url 'employees:id_documents_list' by='' %}">أنواع وثائق الهوية</a>
+        <a class="dropdown-item" href="{% url 'employees:education_degrees_list' by='' %}">الدرجات التعليمية</a>
+        <a class="dropdown-item" href="{% url 'employees:genders_list' by='' %}">انواع الموظفين</a>
+        <a class="dropdown-item" href="{% url 'employees:social_status_list' by='' %}">الحالة الأجتماعية</a>
+        <a class="dropdown-item" href="{% url 'employees:military_status_list' by='' %}">الموقف من التجنيد</a>
+        <a class="dropdown-item" href="{% url 'employees:religions_list' by='' %}">الديانات</a>
+        <h6 class="dropdown-header">ادراج من ملف اكسيل</h6>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href={% url 'employees:import_export' %}>ادراج</a>
+      </div>
+    </li>
+
+    <!-- sidebar Attendance menu -->
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="attendance" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-concierge-bell"></i>
+        <span>الحضور</span>
+      </a>
+      <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+        <a class="dropdown-item" href="{% url 'attendance:attendance_settings' by='' %}">الحضور</a>
+        <a class="dropdown-item" href="{% url 'attendance:attendance_settings' by='' %}">اعدادات الحضور</a>
+      </div>
+    </li>
+
+    <!-- sidebar payroll menu -->
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="payroll" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-hand-holding-usd"></i>
+        <span>المرتبات</span>
+      </a>
+      <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+        <h6 class="dropdown-header">اعدادات المرتب</h6>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="{% url 'payroll:salary_element_types_list' by='' %}">انواع بنود المرتب</a>
+        <a class="dropdown-item" href="{% url 'payroll:insurance_rules_list' by='' %}">قواعد احتساب التأمينات </a>
+        <a class="dropdown-item" href="{% url 'payroll:tax_rules_list' by='' %}">قواعد احتساب الضريبة </a>
+        <a class="dropdown-item" href="{% url 'payroll:custom_rules_list' by='' %}">قواعد احتساب مخصصات </a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href={% url 'payroll:salaries_list' by='' %}>المرتبات</a>
+        <a class="dropdown-item" href={% url 'payroll:copy_salaries' %}>انشاء سريع من<br>مرتبات شهر سابق</a>
+        <a class="dropdown-item" href={% url 'payroll:send_payslips' %}>ارسال قسائم القبض</a>
+      </div>
+    </li>
+
+  </ul>
+
+  <div id="content-wrapper">
+    <div class="container-fluid">
+      {% block body %}
+      {% endblock body %}
+    </div>
+  </div>
+  </div>
+</div>
+  <!-- /.container-fluid -->
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="/static/vendor/jquery/jquery.min.js"></script>
+    <script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="/static/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Page level plugin JavaScript-->
+    <script src="/static/vendor/chart.js/Chart.min.js"></script>
+    <script src="/static/vendor/datatables/jquery.dataTables.js"></script>
+    <script src="/static/vendor/datatables/dataTables.bootstrap4.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="/static/js/sb-admin.min.js"></script>
+
+    <!-- Demo scripts for this page-->
+    <script src="/static/js/demo/datatables-demo.js"></script>
+    <script src="/static/js/demo/chart-area-demo.js"></script>
+
+
 </body>
 </html>

@@ -6,3 +6,4 @@ __pycache__
 .vscode/.ropeproject/objectdb
 mashreq_hr_project/media
 payroll/temporary_payslips/*.pdf
+node_modules

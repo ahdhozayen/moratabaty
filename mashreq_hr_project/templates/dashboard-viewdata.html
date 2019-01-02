@@ -10,16 +10,14 @@
 {% if save_and_add or editing %}
 <div id="open-modal"></div>
 {% endif %}
+<div class="row">
+    <h1 id="title">{{ table_title }}</h1>
+    <div>
+        <button type="button" class="button button5" data-toggle="modal" data-target="#modal">
+            <h4 class="fa fa-plus-square"> اضافة بيان جديد</h4>
 
-<div class="container">
-    <div class="row">
-        <h1 class="col-lg-9 col-md-6 col-sm-12" id="title">{{ table_title }}</h1>
-        <div id="action-bar" class="col-lg-3 col-md-6 col-sm-12">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal">
-                    <h4><img src={% static 'img/add-icon.png' %} alt="add">اضافة بيان جديد</h4>
-                </button>
-        </div>
-      </div>
+        </button>
+    </div>
   </div>
 
 

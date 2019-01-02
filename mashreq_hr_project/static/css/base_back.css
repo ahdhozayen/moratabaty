@@ -1,0 +1,41 @@
+/* html{
+    direction: rtl;
+} */
+
+body{
+    font-family: 'Lateef', cursive;
+}
+ /* .navbar{
+  position: fixed;
+    position: absolute;
+    top: 0;
+    width: 100%
+
+} */
+.navbar {
+  position: relative;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -ms-flex-align: center;
+  align-items: center;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+}
+
+/* nav{
+
+    font-family: 'Lalezar', cursive;
+    font-size: 1.2em;
+    background-color: #243a51;
+    Shadow start
+    -webkit-box-shadow: 4px 4px 12px 0px rgba(36,58,81,0.42);
+    -moz-box-shadow: 4px 4px 12px 0px rgba(36,58,81,0.42);
+    box-shadow: 4px 4px 12px 0px rgba(36,58,81,0.42);
+    Shadow End
+    margin-bottom: 2.5em;
+    position: relative;
+    z-index: 5;
+} */

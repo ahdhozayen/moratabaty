@@ -2,7 +2,9 @@
 {% load staticfiles %}
 {% load extra_tags %}
 {% block table %}
-
+<button type="button" class="button button5" data-toggle="modal" data-target="#export">
+    <h5>تصدير الموظفين</h5>
+</button>
 <table class="table table-hover table-sm">
         <thead>
             <tr>
@@ -14,7 +16,7 @@
                 </th>
                 <th scope="col">
                         <a href={% url 'employees:employees_list' by='branch_id' %} class="text-white">
-                        الفرع   
+                        الفرع
                         </a>
                 </th>
                 <th scope="col">
@@ -24,7 +26,7 @@
                 </th>
                 <th scope="col">
                         <a href={% url 'employees:employees_list' by='sub_section_id' %} class="text-white">
-                        الوظيفة 
+                        الوظيفة
                         </a>
                     </th>
                 <th scope="col">تعديل</th>
@@ -211,16 +213,7 @@
         {% endfor %}
         </tbody>
     </table>
-<div class="container">
-  <div class="row">
-    <h1 class="col-lg-9 col-md-6 col-sm-12" id="title"></h1>
-    <div id="action-bar" class="col-lg-3 col-md-6 col-sm-12">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#export">
-                <h5>أستخراج الموظفين</h5>
-            </button>
-    </div>
-  </div>
-</div>
+
 
 <div class="modal fade" id="export" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
     <div class=" modal-dialog modal modal-dialog-centered w-50 p-3" role="document">
