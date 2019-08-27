@@ -5,6 +5,6 @@ Nothing important here yet.
 ## Meta Data:
 * Django admin credentials:
     
-    user: admin
+    admin
     
-    password: High_pass__00
+    High_pass__00
